@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://img.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="https://img.hcharts.cn/highcharts/highcharts-3d.js"></script>
+<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+</head>
+<body>
+	<div id="container"></div>
+	<div id="sliders">
+		<table>
+			<tr>
+				<td>α 角（内旋转角）</td>
+				<td><input id="alpha" type="range" min="0" max="45" value="15"/> <span id="alpha-value" class="value"></span></td>
+			</tr>
+			<tr>
+				<td>β 角（外旋转角）</td>
+				<td><input id="beta" type="range" min="-45" max="45" value="15"/> <span id="beta-value" class="value"></span></td>
+			</tr>
+			<tr>
+				<td>深度</td>
+				<td><input id="depth" type="range" min="20" max="100" value="50"/> <span id="depth-value" class="value"></span></td>
+			</tr>
+		</table>
+	</div>
+<script type="text/javascript">
+	var chart = new Highcharts.Chart({
+		chart: {
+				renderTo: 'container',
+				type: 'column',
+				options3d: {
+						enabled: true,
+						alpha: 15,
+						beta: 15,
+						depth: 50,
+						viewDistance: 25
+				}
+		},
+		title: {
+				text: '交互性3D柱状图'
+		},
+		subtitle: {
+				text: '可通过滑动下方滑块测试'
+		},
+		plotOptions: {
+				column: {
+						depth: 25
+				}
+		},
+		series: [{
+				name:'图例1',
+				data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+		}]
+		});
+		// 将当前角度信息同步到 DOM 中
+		var alphaValue = document.getElementById('alpha-value'),
+				betaValue = document.getElementById('beta-value'),
+				depthValue = document.getElementById('depth-value');
+		function showValues() {
+				alphaValue.innerHTML = chart.options.chart.options3d.alpha;
+				betaValue.innerHTML = chart.options.chart.options3d.beta;
+				depthValue.innerHTML = chart.options.chart.options3d.depth;
+		}
+		// 监听 sliders 的变化并更新图表
+		$('#sliders input').on('input change', function () {
+				chart.options.chart.options3d[this.id] = this.value;
+				showValues();
+				chart.redraw(false);
+		});
+		showValues();	
+</script>
+</body>
+</html>
